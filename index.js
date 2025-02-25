@@ -5,6 +5,8 @@ import ejsLayouts from 'express-ejs-layouts';
 
 const server = express();
 
+server.use(express.urlencoded({extended: true}));
+
 server.set("view engine", "ejs");
 server.set("views", path.join(path.resolve(), "src", "views"));
 
