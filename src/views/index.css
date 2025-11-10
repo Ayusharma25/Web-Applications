@@ -1,0 +1,16 @@
+.container{
+    margin: 24px;
+}
+
+img{
+    width: 80px;
+}
+
+.product-img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+}

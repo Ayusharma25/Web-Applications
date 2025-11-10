@@ -17,7 +17,7 @@ server.get('/', productController.getProducts);
 server.get('/new', productController.getAddForm);
 server.post('/', productController.addNewProduct);
 
-server.use(express.static('src/views'))
+server.use(express.static(path.join(path.resolve(), 'src', 'views')));
 
 server.listen(7000, () => {
     console.log('Server is running on 7000');

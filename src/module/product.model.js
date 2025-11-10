@@ -8,7 +8,7 @@ export default class ProductModel{
         this.imageUrl= _imageUrl;
     }
 
-    static get(){
+    static getAll(){
         return products;
     }
 
