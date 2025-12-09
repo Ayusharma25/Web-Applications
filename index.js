@@ -13,9 +13,16 @@ server.set("view engine", "ejs");
 server.set("views", path.join(path.resolve(), "src", "views"));
 
 const productController = new ProductController();
+
+server.get('/update-product/:id', productController.getUpdateProductView);
+
 server.get('/', productController.getProducts);
+
 server.get('/new', productController.getAddForm);
+
 server.post('/', validationMiddleware, productController.postAddProduct);
+
+server.post("/update-product", productController.postUpdateProduct);
 
 server.use(express.static(path.join(path.resolve(), 'src', 'views')));
 
