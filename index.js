@@ -20,6 +20,8 @@ server.get('/', productController.getProducts);
 
 server.get('/new', productController.getAddForm);
 
+server.get('/delete-product/:id', productController.deleteProduct);
+
 server.post('/', validationMiddleware, productController.postAddProduct);
 
 server.post("/update-product", productController.postUpdateProduct);
