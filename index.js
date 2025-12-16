@@ -6,6 +6,8 @@ import validationMiddleware from './src/middlewares/validation.middleware.js';
 
 const server = express();
 
+server.use(express.static('public'));
+
 server.use(ejsLayouts);
 server.use(express.json());
 server.use(express.urlencoded({extended: true}));
@@ -20,7 +22,7 @@ server.get('/', productController.getProducts);
 
 server.get('/new', productController.getAddForm);
 
-server.get('/delete-product/:id', productController.deleteProduct);
+server.post('/delete-product/:id', productController.deleteProduct);
 
 server.post('/', validationMiddleware, productController.postAddProduct);
 
