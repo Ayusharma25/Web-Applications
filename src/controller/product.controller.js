@@ -15,7 +15,9 @@ export default class ProductController{
     }
 
     postAddProduct(req, res, next){
-        ProductModel.add(req.body);
+        const { name, desc, price } = req.body;
+        const imageUrl = 'images/' + req.file.filename;
+        ProductModel.add(name, desc, price, imageUrl);
         var products = ProductModel.getAll();
         res.render("index", {products});
     }
