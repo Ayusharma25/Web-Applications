@@ -5,10 +5,18 @@ import path from 'path';
 import ejsLayouts from 'express-ejs-layouts';
 import validationMiddleware from './src/middlewares/validation.middleware.js';
 import { uploadfile } from './src/middlewares/file-upload.middleware.js';
+import session from 'express-session';
+import { auth } from './src/middlewares/auth.middleware.js';
 
 const server = express();
 
 server.use(express.static('public'));
+server.use(session({
+    secret: 'SecretKey',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+}));
 
 server.use(ejsLayouts);
 server.use(express.json());
@@ -30,15 +38,15 @@ server.post('/register', usersController.postRegister);
 
 server.get('/update-product/:id', productController.getUpdateProductView);
 
-server.get('/', productController.getProducts);
+server.get('/', auth, productController.getProducts);
 
-server.get('/new', productController.getAddForm);
+server.get('/new', auth, productController.getAddForm);
 
-server.post('/delete-product/:id', productController.deleteProduct);
+server.post('/delete-product/:id', auth, productController.deleteProduct);
 
-server.post('/', uploadfile.single('imageUrl'), validationMiddleware, productController.postAddProduct);
+server.post('/', auth, uploadfile.single('imageUrl'), validationMiddleware, productController.postAddProduct);
 
-server.post("/update-product", uploadfile.single('imageUrl'), productController.postUpdateProduct);
+server.post("/update-product", auth, uploadfile.single('imageUrl'), productController.postUpdateProduct);
 
 server.use(express.static(path.join(path.resolve(), 'src', 'views')));
 

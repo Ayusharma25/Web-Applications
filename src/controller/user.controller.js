@@ -22,6 +22,7 @@ export default class UserController{
         if(!user){
             return res.render("login", {errorMessage: "Invalid email or password"});
         }
+        req.session.userEmail = email;
         var products = ProductModel.getAll();
         return res.render("index", {products});
     }
