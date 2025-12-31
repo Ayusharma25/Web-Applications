@@ -1,5 +1,6 @@
 import express from 'express';
 import ProductController from './src/controller/product.controller.js';
+import UserController from './src/controller/user.controller.js';
 import path from 'path';
 import ejsLayouts from 'express-ejs-layouts';
 import validationMiddleware from './src/middlewares/validation.middleware.js';
@@ -16,6 +17,16 @@ server.set("view engine", "ejs");
 server.set("views", path.join(path.resolve(), "src", "views"));
 
 const productController = new ProductController();
+
+const usersController = new UserController();
+
+server.get('/register', usersController.getRegister);
+
+server.get('/login', usersController.getLogin);
+
+server.post('/login', usersController.postLogin);
+
+server.post('/register', usersController.postRegister);
 
 server.get('/update-product/:id', productController.getUpdateProductView);
 

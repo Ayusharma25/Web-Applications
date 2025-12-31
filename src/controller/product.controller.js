@@ -3,7 +3,7 @@ import ProductModel from '../module/product.model.js';
 
 export default class ProductController{
     getProducts(req, res){
-        let products = ProductModel.getAll();
+        var products = ProductModel.getAll();
         res.render("index", {products});
         // return res.sendFile(
         //     path.join(path.resolve(), "src", "views", "products.html")
