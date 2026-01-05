@@ -4,14 +4,14 @@ import ProductModel from '../module/product.model.js';
 export default class ProductController{
     getProducts(req, res){
         var products = ProductModel.getAll();
-        res.render("index", {products});
+        res.render("index", {products, userEmail: req.session.userEmail});
         // return res.sendFile(
         //     path.join(path.resolve(), "src", "views", "products.html")
         // )
     }
 
     getAddForm(req, res, next){
-        return res.render("new-product", {errorMessage: null});
+        return res.render("new-product", {errorMessage: null}, {userEmail: req.session.userEmail});
     }
 
     postAddProduct(req, res, next){
@@ -19,14 +19,14 @@ export default class ProductController{
         const imageUrl = 'images/' + req.file.filename;
         ProductModel.add(name, desc, price, imageUrl);
         var products = ProductModel.getAll();
-        res.render("index", {products});
+        res.render("index", {products, userEmail: req.session.userEmail});
     }
 
     getUpdateProductView(req, res, next){
         const id = req.params.id;
         const productFound = ProductModel.getById(id);
         if(productFound){
-            res.render("update-product", {product: productFound, errorMessage: null});
+            res.render("update-product", {product: productFound, errorMessage: null, userEmail: req.session.userEmail});
         }
         else{
             res.status(401).send("Product not found");
