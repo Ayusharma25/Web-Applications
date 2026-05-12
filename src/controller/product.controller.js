@@ -1,5 +1,6 @@
 import path from 'path';
 import ProductModel from '../module/product.model.js';
+import { sendProductChangeEmail } from '../services/email.service.js';
 
 export default class ProductController{
     getProducts(req, res){
@@ -11,13 +12,18 @@ export default class ProductController{
     }
 
     getAddForm(req, res, next){
-        return res.render("new-product", {errorMessage: null}, {userEmail: req.session.userEmail});
+        return res.render("new-product", {errorMessage: null, userEmail: req.session.userEmail});
     }
 
-    postAddProduct(req, res, next){
+    async postAddProduct(req, res, next){
         const { name, desc, price } = req.body;
         const imageUrl = 'images/' + req.file.filename;
         ProductModel.add(name, desc, price, imageUrl);
+        await sendProductChangeEmail({
+            to: req.session.userEmail,
+            action: 'Added',
+            product: { name, desc, price },
+        });
         var products = ProductModel.getAll();
         res.render("index", {products, userEmail: req.session.userEmail});
     }
@@ -33,20 +39,33 @@ export default class ProductController{
         }
     }
 
-    postUpdateProduct(req, res, next){
-        ProductModel.update(req.body);
+    async postUpdateProduct(req, res, next){
+        const existingProduct = ProductModel.getById(req.body.id);
+        const imageUrl = req.file ? 'images/' + req.file.filename : existingProduct.imageUrl;
+        const updatedProduct = {...req.body, imageUrl};
+        ProductModel.update(updatedProduct);
+        await sendProductChangeEmail({
+            to: req.session.userEmail,
+            action: 'Updated',
+            product: updatedProduct,
+        });
         var products = ProductModel.getAll();
-        res.render("index", {products});
+        res.render("index", {products, userEmail: req.session.userEmail});
     }
 
-    deleteProduct(req, res, next){
+    async deleteProduct(req, res, next){
         const id = req.params.id;
         const productFound = ProductModel.getById(id);
         if(!productFound){
             return res.status(401).send("Product not found");
         }
         ProductModel.delete(id);
+        await sendProductChangeEmail({
+            to: req.session.userEmail,
+            action: 'Deleted',
+            product: productFound,
+        });
         var products = ProductModel.getAll();
-        res.render("index", {products});
+        res.render("index", {products, userEmail: req.session.userEmail});
     }
 }

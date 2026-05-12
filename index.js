@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import ProductController from './src/controller/product.controller.js';
 import UserController from './src/controller/user.controller.js';
@@ -14,13 +15,17 @@ const server = express();
 
 server.use(express.static('public'));
 server.use(cookieParser());
-server.use(setLastVisit);
 server.use(session({
     secret: 'SecretKey',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
 }));
+server.use((req, res, next) => {
+    res.locals.currentPath = req.path;
+    res.locals.userEmail = req.session.userEmail;
+    next();
+});
 
 server.use(ejsLayouts);
 server.use(express.json());
@@ -44,7 +49,7 @@ server.post('/register', usersController.postRegister);
 
 server.get('/update-product/:id', productController.getUpdateProductView);
 
-server.get('/', auth, productController.getProducts);
+server.get('/', auth, setLastVisit, productController.getProducts);
 
 server.get('/new', auth, productController.getAddForm);
 

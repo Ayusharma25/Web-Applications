@@ -1,40 +1,45 @@
-        <% if(locals.lastVisit) { %>
-        <div class="alert alert-primary" role="alert">
-            Your Last Visit was on : <strong><%= locals.lastVisit %></strong>
-        </div>
-        <% } %>
+<% if(locals.lastVisit) { %>
+    <div class="alert alert-info app-alert" role="alert">
+        Last product-page visit: <strong><%= locals.lastVisit %></strong>
+    </div>
+<% } %>
 
-        <h1 class="mt-5 mb-4 header">Products</h1>
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% products.forEach(product => { %>
-                    
-                <tr>
-                    <th><%= product.id %></th>
-                    <td><%= product.name %></td>
-                    <td><%= product.desc %></td>
-                    <td scope="col"><%= product.price %></td>
-                    <td>
-                        <img src="<%= product.imageUrl %>" class="product-img" alt="<%= product.name %>">
-                    </td>
-                    <td>
-                        <a href="/update-product/<%= product.id %>" class="btn btn-warning">Update</a>
-                        <button class="btn btn-danger" onclick="deleteProduct('<%= product.id %>')">Delete</button>
-                        <!-- <a href="/delete-product/<%= product.id %>" class="btn btn-danger">Delete</a> -->
-                    </td>
-                </tr>
+<section class="page-heading">
+    <div>
+        <p class="section-label">Inventory</p>
+        <h1>Products</h1>
+    </div>
+    <a href="/new" class="btn btn-primary">Add Product</a>
+</section>
 
-                <% }) %>
-            
-            </tbody>
-        </table>
+<% if(products.length === 0) { %>
+    <div class="empty-state">
+        <h2>No products yet</h2>
+        <p>Add your first item to start building the inventory.</p>
+        <a href="/new" class="btn btn-primary">Add Product</a>
+    </div>
+<% } else { %>
+    <div class="products-grid">
+        <% products.forEach(product => { %>
+            <article class="product-card">
+                <div class="product-media">
+                    <img src="<%= product.imageUrl %>" class="product-img" alt="<%= product.name %>">
+                </div>
+                <div class="product-content">
+                    <div>
+                        <p class="product-id">ID #<%= product.id %></p>
+                        <h2><%= product.name %></h2>
+                        <p><%= product.desc %></p>
+                    </div>
+                    <div class="product-footer">
+                        <strong>Rs. <%= Number(product.price).toLocaleString('en-IN') %></strong>
+                        <div class="product-actions">
+                            <a href="/update-product/<%= product.id %>" class="btn btn-sm btn-outline-secondary">Update</a>
+                            <button class="btn btn-sm btn-danger" onclick="deleteProduct('<%= product.id %>')">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        <% }) %>
+    </div>
+<% } %>

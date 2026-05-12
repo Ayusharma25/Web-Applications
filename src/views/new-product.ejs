@@ -1,28 +1,35 @@
-<h1 class="mt-5 mb-4 header">Add New Product</h1>
+<section class="page-heading compact-heading">
+    <div>
+        <p class="section-label">Inventory item</p>
+        <h1>Add New Product</h1>
+    </div>
+    <a href="/" class="btn btn-outline-secondary">Back</a>
+</section>
 
-<% if(errorMessage) { %>
-<div class="alert alert-danger" role="alert">
-  <%= errorMessage %>
+<div class="form-card product-form-card">
+    <% if(errorMessage) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Mechanical Keyboard">
+        </div>
+        <div class="mb-3">
+            <label for="desc" class="form-label">Product Description</label>
+            <textarea name="desc" id="desc" rows="3" class="form-control" placeholder="Short, useful description for the product list"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" name="price" min="1" step="0.01" placeholder="999">
+        </div>
+        <div class="mb-4">
+            <label for="imageUrl" class="form-label">Product Image</label>
+            <input type="file" class="form-control" id="imageUrl" name="imageUrl" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
 </div>
-<% } %>
-
-<form action="/" method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="name" class="form-label">Product Name</label>
-        <input type="text" class="form-control" id="name" name="name">
-    </div>
-    <div class="mb-3">
-        <label for="desc" class="form-label">Product Description</label>
-        <textarea name="desc" id="desc" rows="3" class="form-control"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input type="number" class="form-control" id="price" name="price">
-    </div>
-    <div class="mb-3">
-        <label for="imageUrl" class="form-label">Image URL</label>
-        <!-- <input type="text" id="imageUrl" name="imageUrl" class="form-control"> -->
-         <input type="file" class="form-control" id="imageUrl" name="imageUrl" accept="image/*">
-    </div>
-    <button type="submit" class="btn btn-primary">Add Product</button>
-</form>
